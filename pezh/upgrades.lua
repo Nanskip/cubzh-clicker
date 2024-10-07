@@ -10,6 +10,7 @@ local upgrades = {
         value = 1,
         cost_action = "*",
         cost_value = 1.5,
+        upgraded = 0,
         max_upgrades = 5,
     },
     {
@@ -22,6 +23,7 @@ local upgrades = {
         value = 0.5,
         cost_action = "*",
         cost_value = 1.3,
+        upgraded = 0,
         max_upgrades = 5,
     },
 }
