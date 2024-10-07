@@ -9,7 +9,7 @@ local quests = {
                 end
                 return false
             end,
-            reward = "100 coins",
+            reward = "100 🇵",
             get_reward = function(self)
                 _COINS = _COINS + 100
                 self.unlocked = true
@@ -25,7 +25,7 @@ local quests = {
                 end
                 return false
             end,
-            reward = "100 coins",
+            reward = "100 🇵",
             get_reward = function(self)
                 _COINS = _COINS + 100
                 self.unlocked = true
