@@ -36,7 +36,7 @@ local quests = {
             name = "Professional clicker",
             description = "Get 300 coins.",
             check = function()
-                if _COINS >= 10 then
+                if _COINS >= 300 then
                     return true
                 end
                 return false
