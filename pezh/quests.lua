@@ -49,7 +49,7 @@ local quests = {
             unlocked = false,
         },
         {
-            name = "Fully robotic",
+            name = "Easy clicks",
             description = "Upgrade coins per seconds \nto max level.",
             check = function()
                 if _UPGRADES[2].upgraded == _UPGRADES[2].max_upgrades then
@@ -60,6 +60,38 @@ local quests = {
             reward = "300 🇵",
             get_reward = function(self)
                 _COINS = _COINS + 300
+                self.unlocked = true
+            end,
+            unlocked = false,
+        },
+        {
+            name = "I am rich!",
+            description = "Get 2000 coins.",
+            check = function()
+                if _COINS >= 2000 then
+                    return true
+                end
+                return false
+            end,
+            reward = "500 🇵",
+            get_reward = function(self)
+                _COINS = _COINS + 500
+                self.unlocked = true
+            end,
+            unlocked = false,
+        },
+        {
+            name = "Coin industry",
+            description = "Upgrade coin factories \nto max level.",
+            check = function()
+                if _UPGRADES[4].upgraded == _UPGRADES[4].max_upgrades then
+                    return true
+                end
+                return false
+            end,
+            reward = "5 🇵/S",
+            get_reward = function(self)
+                _COINS_PER_SECOND = _COINS_PER_SECOND + 5
                 self.unlocked = true
             end,
             unlocked = false,

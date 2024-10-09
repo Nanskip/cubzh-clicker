@@ -13,6 +13,8 @@ variables = function()
     _CURRENT_SCREEN = "Coin"
     _DOWNLOAD_COMPLETE = false
 
+    _SELECTED_UPGRADES_PAGE = 0
+
     _COINS_PER_SECOND = 0
 end
 
@@ -250,7 +252,10 @@ updateUi = function()
 
     -- UPGRADES
     if _CURRENT_SCREEN == "Upgrades" then
-        for i=1, #_UPGRADES do
+        for i=(_SELECTED_UPGRADES_PAGE*6)+1, (_SELECTED_UPGRADES_PAGE+1)*6 do
+            if _UPGRADES[i] == nil then
+                break
+            end
             hud.Upgrades.Buttons[i].name.Text = _UPGRADES[i].name
             hud.Upgrades.Buttons[i].cost.Text = "Cost: " .. _UPGRADES[i].cost
             if _UPGRADES[i].upgraded >= _UPGRADES[i].max_upgrades then
@@ -357,7 +362,9 @@ download = function()
     images = {}
     images_downloading = {
         pezh_cpc_1 = "pezh/images/cpc_1.png",
+        pezh_cpc_2 = "pezh/images/cpc_2.png",
         pezh_cps_1 = "pezh/images/cps_1.png",
+        pezh_cps_2 = "pezh/images/cps_2.png",
     }
     images_need_download = 2
     images_downloaded = 0
@@ -427,6 +434,9 @@ function checkload()
     button_click_sound.Pitch = 1
     button_click_sound.Volume = 0.8
 end
+
+Client.DirectionalPad = nil
+Client.AnalogPad = nil
 
 function lerp(a, b, t)
     return a * (1-t) + b * t
