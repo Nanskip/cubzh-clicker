@@ -108,10 +108,14 @@ initUi = function()
                 if _UPGRADES[i].type == "coins_per_click" then
                     if _UPGRADES[i].action == "+" then
                         _CLICK_AMOUNT = _CLICK_AMOUNT + _UPGRADES[i].value
+                    elseif _UPGRADES[i].action == "*" then
+                        _CLICK_AMOUNT = _CLICK_AMOUNT * _UPGRADES[i].value
                     end
                 elseif _UPGRADES[i].type == "coins_per_seconds" then
                     if _UPGRADES[i].action == "+" then
                         _COINS_PER_SECOND = _COINS_PER_SECOND + _UPGRADES[i].value
+                    elseif _UPGRADES[i].action == "*" then
+                        _COINS_PER_SECOND = _COINS_PER_SECOND * _UPGRADES[i].value
                     end
                 end
 
@@ -361,12 +365,15 @@ download = function()
 
     images = {}
     images_downloading = {
+        debug = "pezh/images/debug.png",
         pezh_cpc_1 = "pezh/images/cpc_1.png",
         pezh_cpc_2 = "pezh/images/cpc_2.png",
+        pezh_cpc_3 = "pezh/images/cpc_3.png",
         pezh_cps_1 = "pezh/images/cps_1.png",
         pezh_cps_2 = "pezh/images/cps_2.png",
+        pezh_cps_3 = "pezh/images/cps_3.png",
     }
-    images_need_download = 4
+    images_need_download = 7
     images_downloaded = 0
 
     for k, v in pairs(images_downloading) do
