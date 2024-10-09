@@ -89,7 +89,7 @@ local quests = {
                 end
                 return false
             end,
-            reward = "5 🇵/S",
+            reward = "5 🛠️",
             get_reward = function(self)
                 _COINS_PER_SECOND = _COINS_PER_SECOND + 5
                 self.unlocked = true

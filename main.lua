@@ -366,7 +366,7 @@ download = function()
         pezh_cps_1 = "pezh/images/cps_1.png",
         pezh_cps_2 = "pezh/images/cps_2.png",
     }
-    images_need_download = 2
+    images_need_download = 4
     images_downloaded = 0
 
     for k, v in pairs(images_downloading) do
