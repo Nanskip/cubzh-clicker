@@ -14,6 +14,7 @@ variables = function()
     _DOWNLOAD_COMPLETE = false
 
     _SELECTED_UPGRADES_PAGE = 0
+    _SELECTED_QUESTS_PAGE = 0
 
     _COINS_PER_SECOND = 0
 end
@@ -269,7 +270,7 @@ updateUi = function()
             hud.Upgrades.Buttons[i].description.Text = _UPGRADES[i].description
 
             hud.Upgrades.Buttons[i].Width, hud.Upgrades.Buttons[i].Height = Screen.Width - 10, Screen.Height / 10
-            hud.Upgrades.Buttons[i].pos = Number2(5, Screen.Height - Screen.SafeArea.Top - 5 - hud.Upgrades.Buttons[i].Height - i * (hud.Upgrades.Buttons[i].Height+2))
+            hud.Upgrades.Buttons[i].pos = Number2(5, Screen.Height - Screen.SafeArea.Top - 5 - hud.Upgrades.Buttons[i].Height - (i - _SELECTED_UPGRADES_PAGE*6) * (hud.Upgrades.Buttons[i].Height+2))
 
             hud.Upgrades.Buttons[i].image.Width, hud.Upgrades.Buttons[i].image.Height = hud.Upgrades.Buttons[i].Height - 10, hud.Upgrades.Buttons[i].Height - 10
             hud.Upgrades.Buttons[i].image.pos = Number2(hud.Upgrades.Buttons[i].pos.X + 5, hud.Upgrades.Buttons[i].pos.Y + hud.Upgrades.Buttons[i].Height - hud.Upgrades.Buttons[i].image.Height - 5)
@@ -302,9 +303,9 @@ updateUi = function()
 
     -- QUESTS
     if _CURRENT_SCREEN == "Quests" then
-        for i=1, #_QUESTS.regular do
+        for i=(_SELECTED_QUESTS_PAGE*6)+1, (_SELECTED_QUESTS_PAGE+1)*6 do
             hud.Quests.Buttons[i].Width, hud.Quests.Buttons[i].Height = Screen.Width - 10, Screen.Height / 10
-            hud.Quests.Buttons[i].pos = Number2(5, Screen.Height - Screen.SafeArea.Top - 5 - hud.Quests.Buttons[i].Height - i * (hud.Quests.Buttons[i].Height+2))
+            hud.Quests.Buttons[i].pos = Number2(5, Screen.Height - Screen.SafeArea.Top - 5 - hud.Quests.Buttons[i].Height - (i-_SELECTED_QUESTS_PAGE*6) * (hud.Quests.Buttons[i].Height+2))
 
             hud.Quests.Buttons[i].name.Text = _QUESTS.regular[i].name
             hud.Quests.Buttons[i].description.Text = _QUESTS.regular[i].description

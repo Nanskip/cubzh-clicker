@@ -96,6 +96,38 @@ local quests = {
             end,
             unlocked = false,
         },
+        {
+            name = "I need more!",
+            description = "Get 10000 coins.",
+            check = function()
+                if _COINS >= 10000 then
+                    return true
+                end
+                return false
+            end,
+            reward = "5000 🇵",
+            get_reward = function(self)
+                _COINS = _COINS + 5000
+                self.unlocked = true
+            end,
+            unlocked = false,
+        },
+        {
+            name = "I am farmer?",
+            description = "Upgrade media coins \nto max level.",
+            check = function()
+                if _UPGRADES[6].upgraded == _UPGRADES[6].max_upgrades then
+                    return true
+                end
+                return false
+            end,
+            reward = "30 🛠️",
+            get_reward = function(self)
+                _COINS_PER_SECOND = _COINS_PER_SECOND + 30
+                self.unlocked = true
+            end,
+            unlocked = false,
+        },
     }
 }
 
