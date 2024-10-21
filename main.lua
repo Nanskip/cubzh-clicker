@@ -12,7 +12,6 @@ variables = function()
     _CLICK_AMOUNT = 1
     _CURRENT_SCREEN = "Coin"
     _DOWNLOAD_COMPLETE = false
-    _QUEST_TAB = "Career"
 
     _SELECTED_UPGRADES_PAGE = 0
     _SELECTED_QUESTS_PAGE = 0
@@ -159,6 +158,28 @@ initUi = function()
         hud.Upgrades.Buttons[i].cost.pos = Number2(0, 0)
     end
 
+    hud.Upgrades.Buttons.Right = ui:createButton("->")
+    hud.Upgrades.Buttons.Right.onRelease = function()
+        _SELECTED_UPGRADES_PAGE = _SELECTED_UPGRADES_PAGE + 1
+        if _SELECTED_UPGRADES_PAGE > math.floor(#_UPGRADES / 6) then
+            _SELECTED_UPGRADES_PAGE = math.floor(#_UPGRADES / 6)
+        end
+        updateUi()
+    end
+    hud.Upgrades.Buttons.Right.pos = Number2(-1000, -1000)
+    hud.Upgrades.Buttons.Right.Width, hud.Upgrades.Buttons.Right.Height = Screen.Width / 5, Screen.Height / 15
+
+    hud.Upgrades.Buttons.Left = ui:createButton("<-")
+    hud.Upgrades.Buttons.Left.onRelease = function()
+        _SELECTED_UPGRADES_PAGE = _SELECTED_UPGRADES_PAGE - 1
+        if _SELECTED_UPGRADES_PAGE < 0 then
+            _SELECTED_UPGRADES_PAGE = 0
+        end
+        updateUi()
+    end
+    hud.Upgrades.Buttons.Left.pos = Number2(-1000, -1000)
+    hud.Upgrades.Buttons.Left.Width, hud.Upgrades.Buttons.Left.Height = Screen.Width / 5, Screen.Height / 15
+
     -- QUESTS
     hud.Quests = {}
     hud.Quests.Buttons = {}
@@ -188,89 +209,27 @@ initUi = function()
         hud.Quests.Buttons[i].reward.pos = Number2(0, 0)
     end
 
-    _QUESTS.daily = {}
-    local ai = AI:CreateChat([["You are creator for daily quests in my clicker game. You should answer with code like this:
-        _QUESTS.daily[i] = {
-            name = "Example name",
-            description = "Example description", -- should be 30 letters or less, you can use \n one time
-            check = function()
-                if _COINS >= 100000000 then -- checking money for example
-                    return true
-                end
-                return false
-            end,
-            reward = "50 🇵", -- reward text
-            get_reward = function(self) -- get reward function, executes if check() returns true
-                _COINS = _COINS + 50
-                self.unlocked = true
-            end,
-            unlocked = false, -- always false on start
-        }
-
-        Additional data of player:
-        _COINS = 
-        ]] .. _COINS .. " _COINS_PER_SECOND = " .. _COINS_PER_SECOND .. " _CLICK_AMOUNT" .. _CLICK_AMOUNT)
-    for i=1, 6 do
-        _QUESTS.daily[i] = {
-            name = "Loading name...",
-            description = "Loading description...",
-            check = function()
-                if _COINS >= 100000000 then
-                    return true
-                end
-                return false
-            end,
-            reward = "0 🇵",
-            get_reward = function(self)
-                _COINS = _COINS + 0
-                self.unlocked = true
-            end,
-            unlocked = false,
-        }
-
-        ai:Say("Answer for " .. i .. " daily quest. Send only code text without ``` or comments.", function(err, message)
-            if not err then
-                _QUESTS.daily[i] = load(message, nil, "bt", _ENV)()
-            end
-        end)
-    end
-
-    hud.DailyQuests = {}
-    hud.DailyQuests.Buttons = {}
-    for i=1, #_QUESTS.daily do
-        hud.DailyQuests.Buttons[i] = ui:createButton("")
-        hud.DailyQuests.Buttons[i].onRelease = function(self)
-            if _QUESTS.daily[i].check() then
-                _QUESTS.daily[i]:get_reward()
-                self:disable()
-
-                quest_complete_sound:Play()
-            end
-            updateUi()
+    hud.Quests.Buttons.Right = ui:createButton("->")
+    hud.Quests.Buttons.Right.onRelease = function()
+        _SELECTED_QUESTS_PAGE = _SELECTED_QUESTS_PAGE + 1
+        if _SELECTED_QUESTS_PAGE > math.floor(#_QUESTS.regular / 6) then
+            _SELECTED_QUESTS_PAGE = math.floor(#_QUESTS.regular / 6)
         end
-        hud.DailyQuests.Buttons[i].pos = Number2(0, 0)
-        hud.DailyQuests.Buttons[i].Width, hud.DailyQuests.Buttons[i].Height = 0, 0
-
-        hud.DailyQuests.Buttons[i].name = ui:createText(_QUESTS.daily[i].name, Color(0, 0, 0))
-        hud.DailyQuests.Buttons[i].name.pos = Number2(0, 0)
-        hud.DailyQuests.Buttons[i].name.object.Scale = 1
-
-        hud.DailyQuests.Buttons[i].description = ui:createText(_QUESTS.daily[i].description, Color(0, 0, 0))
-        hud.DailyQuests.Buttons[i].description.pos = Number2(0, 0)
-        hud.DailyQuests.Buttons[i].description.object.Scale = 0.8
-
-        hud.DailyQuests.Buttons[i].reward = ui:createText(_QUESTS.daily[i].reward, Color(0, 0, 0))
-        hud.DailyQuests.Buttons[i].reward.pos = Number2(0, 0)
+        updateUi()
     end
+    hud.Quests.Buttons.Right.pos = Number2(-1000, -1000)
+    hud.Quests.Buttons.Right.Width, hud.Quests.Buttons.Right.Height = Screen.Width / 5, Screen.Height / 15
 
-    hud.Quests.Career = ui:createButton("Career")
-    hud.Quests.Career.onRelease = function(self)
-        _QUEST_TAB = "Career"
+    hud.Quests.Buttons.Left = ui:createButton("<-")
+    hud.Quests.Buttons.Left.onRelease = function()
+        _SELECTED_QUESTS_PAGE = _SELECTED_QUESTS_PAGE - 1
+        if _SELECTED_QUESTS_PAGE < 0 then
+            _SELECTED_QUESTS_PAGE = 0
+        end
+        updateUi()
     end
-    hud.Quests.Daily = ui:createButton("Daily")
-    hud.Quests.Career.onRelease = function(self)
-        _QUEST_TAB = "Daily"
-    end
+    hud.Quests.Buttons.Left.pos = Number2(-1000, -1000)
+    hud.Quests.Buttons.Left.Width, hud.Quests.Buttons.Left.Height = Screen.Width / 5, Screen.Height / 15
 
     -- COINS
     hud.Coins = {}
@@ -302,12 +261,6 @@ initUi = function()
         
         updateUi()
     end
-
-    hud.Music = AudioSource()
-    hud.Music.Sound = sounds.music
-    hud.Music.Volume = 0.5
-    hud.Music.Loop = true
-    hud.Music:Play()
 end 
 
 updateUi = function()
@@ -328,7 +281,7 @@ updateUi = function()
 
     -- COINS
     function updateCoins()
-        hud.Coins.Text.Text = "🇵 " .. math.floor(_COINS)
+        hud.Coins.Text.Text = "🇵 " .. formatCoins(_COINS)
         hud.Coins.Text.pos = Number2(Screen.Width / 2 - hud.Coins.Text.Width / 2, Screen.Height - Screen.SafeArea.Top - 5 - hud.Coins.Text.Height)
         hud.Coins.Background.Width = hud.Coins.Text.Width + 6
         hud.Coins.Background.Height = hud.Coins.Text.Height + 6
@@ -347,6 +300,17 @@ updateUi = function()
     hud.DownButtons.Quests.Width, hud.DownButtons.Quests.Height = Screen.Width / 3, Screen.Height / 10
 
     -- UPGRADES
+    for i=1, #_UPGRADES do
+        hud.Upgrades.Buttons[i].Width, hud.Upgrades.Buttons[i].Height = 0, 0
+        hud.Upgrades.Buttons[i].pos = Number2(-1000, -1000)
+        hud.Upgrades.Buttons[i].image.pos = Number2(-1000, -1000)
+        hud.Upgrades.Buttons[i].name.pos = Number2(-1000, -1000)
+        hud.Upgrades.Buttons[i].description.pos = Number2(-1000, -1000)
+        hud.Upgrades.Buttons[i].cost.pos = Number2(-1000, -1000)
+    end
+    hud.Upgrades.Buttons.Right.pos = Number2(-1000, -1000)
+    hud.Upgrades.Buttons.Left.pos = Number2(-1000, -1000)
+
     if _CURRENT_SCREEN == "Upgrades" then
         for i=(_SELECTED_UPGRADES_PAGE*6)+1, (_SELECTED_UPGRADES_PAGE+1)*6 do
             if _UPGRADES[i] == nil then
@@ -381,86 +345,55 @@ updateUi = function()
                 hud.Upgrades.Buttons[i]:setColorDisabled(Color(216, 222, 104))
             end
         end
-    else
-        for i=1, #_UPGRADES do
-            hud.Upgrades.Buttons[i].Width, hud.Upgrades.Buttons[i].Height = 0, 0
-            hud.Upgrades.Buttons[i].pos = Number2(-1000, -1000)
-            hud.Upgrades.Buttons[i].image.pos = Number2(-1000, -1000)
-            hud.Upgrades.Buttons[i].name.pos = Number2(-1000, -1000)
-            hud.Upgrades.Buttons[i].description.pos = Number2(-1000, -1000)
-            hud.Upgrades.Buttons[i].cost.pos = Number2(-1000, -1000)
-        end
+        hud.Upgrades.Buttons.Right.Width, hud.Upgrades.Buttons.Right.Height = Screen.Width / 5, Screen.Height / 15
+        hud.Upgrades.Buttons.Left.Width, hud.Upgrades.Buttons.Left.Height = Screen.Width / 5, Screen.Height / 15
+        hud.Upgrades.Buttons.Right.pos = Number2(Screen.Width - hud.Upgrades.Buttons.Right.Width - 10, Screen.Height / 10+5)
+        hud.Upgrades.Buttons.Left.pos = Number2(10, Screen.Height / 10+5)
     end
 
+
     -- QUESTS
+    for i=1, #_QUESTS.regular do
+        hud.Quests.Buttons[i].Width, hud.Quests.Buttons[i].Height = 0, 0
+        hud.Quests.Buttons[i].pos = Number2(-1000, -1000)
+        hud.Quests.Buttons[i].name.pos = Number2(-1000, -1000)
+        hud.Quests.Buttons[i].description.pos = Number2(-1000, -1000)
+        hud.Quests.Buttons[i].reward.pos = Number2(-1000, -1000)
+    end
+    hud.Quests.Buttons.Right.pos = Number2(-1000, -1000)
+    hud.Quests.Buttons.Left.pos = Number2(-1000, -1000)
+
     if _CURRENT_SCREEN == "Quests" then
-        if _QUEST_TAB == "Career" then
-            for i=(_SELECTED_QUESTS_PAGE*6)+1, (_SELECTED_QUESTS_PAGE+1)*6 do
-                hud.Quests.Buttons[i].Width, hud.Quests.Buttons[i].Height = Screen.Width - 10, Screen.Height / 10
-                hud.Quests.Buttons[i].pos = Number2(5, Screen.Height - Screen.SafeArea.Top - 5 - hud.Quests.Buttons[i].Height - (i-_SELECTED_QUESTS_PAGE*6) * (hud.Quests.Buttons[i].Height+2))
+        for i=(_SELECTED_QUESTS_PAGE*6)+1, (_SELECTED_QUESTS_PAGE+1)*6 do
+            if _QUESTS.regular[i] == nil then
+                break
+            end
+            hud.Quests.Buttons[i].Width, hud.Quests.Buttons[i].Height = Screen.Width - 10, Screen.Height / 10
+            hud.Quests.Buttons[i].pos = Number2(5, Screen.Height - Screen.SafeArea.Top - 5 - hud.Quests.Buttons[i].Height - (i-_SELECTED_QUESTS_PAGE*6) * (hud.Quests.Buttons[i].Height+2))
 
-                hud.Quests.Buttons[i].name.Text = _QUESTS.regular[i].name
-                hud.Quests.Buttons[i].description.Text = _QUESTS.regular[i].description
+            hud.Quests.Buttons[i].name.Text = _QUESTS.regular[i].name
+            hud.Quests.Buttons[i].description.Text = _QUESTS.regular[i].description
 
-                if _QUESTS.regular[i].check() then
-                    if _QUESTS.regular[i].unlocked == false then
-                        hud.Quests.Buttons[i]:setColor(Color(123, 224, 147))
-                    else
-                        hud.Quests.Buttons[i].reward.Text = "✅"
-                        hud.Quests.Buttons[i]:setColor(Color(216, 222, 104))
-                        hud.Quests.Buttons[i]:setColorDisabled(Color(216, 222, 104))
-                    end
+            if _QUESTS.regular[i].check() then
+                if _QUESTS.regular[i].unlocked == false then
+                    hud.Quests.Buttons[i]:setColor(Color(123, 224, 147))
                 else
-                    hud.Quests.Buttons[i]:setColor(Color(181, 196, 157))
+                    hud.Quests.Buttons[i].reward.Text = "✅"
+                    hud.Quests.Buttons[i]:setColor(Color(216, 222, 104))
+                    hud.Quests.Buttons[i]:setColorDisabled(Color(216, 222, 104))
                 end
-                
-                hud.Quests.Buttons[i].name.pos = Number2(hud.Quests.Buttons[i].pos.X + 10, hud.Quests.Buttons[i].pos.Y + hud.Quests.Buttons[i].Height - hud.Quests.Buttons[i].name.Height - 5)
-                hud.Quests.Buttons[i].reward.pos = Number2(hud.Quests.Buttons[i].pos.X + hud.Quests.Buttons[i].Width - hud.Quests.Buttons[i].reward.Width - 10, hud.Quests.Buttons[i].pos.Y + hud.Quests.Buttons[i].Height - hud.Quests.Buttons[i].reward.Height)
-                hud.Quests.Buttons[i].description.pos = Number2(hud.Quests.Buttons[i].pos.X + 10, hud.Quests.Buttons[i].pos.Y + hud.Quests.Buttons[i].Height - hud.Quests.Buttons[i].description.Height - hud.Quests.Buttons[i].name.Height)
+            else
+                hud.Quests.Buttons[i]:setColor(Color(181, 196, 157))
             end
-        elseif _QUEST_TAB = "Daily"
-            for i=(_SELECTED_QUESTS_PAGE*6)+1, (_SELECTED_QUESTS_PAGE+1)*6 do
-                hud.DailyQuests.Buttons[i].Width, hud.DailyQuests.Buttons[i].Height = Screen.Width - 10, Screen.Height / 10
-                hud.DailyQuests.Buttons[i].pos = Number2(5, Screen.Height - Screen.SafeArea.Top - 5 - hud.DailyQuests.Buttons[i].Height - (i-_SELECTED_QUESTS_PAGE*6) * (hud.Quests.Buttons[i].Height+2))
-
-                hud.DailyQuests.Buttons[i].name.Text = _QUESTS.regular[i].name
-                hud.DailyQuests.Buttons[i].description.Text = _QUESTS.regular[i].description
-
-                if _QUESTS.regular[i].check() then
-                    if _QUESTS.regular[i].unlocked == false then
-                        hud.DailyQuests.Buttons[i]:setColor(Color(123, 224, 147))
-                    else
-                        hud.DailyQuests.Buttons[i].reward.Text = "✅"
-                        hud.DailyQuests.Buttons[i]:setColor(Color(216, 222, 104))
-                        hud.DailyQuests.Buttons[i]:setColorDisabled(Color(216, 222, 104))
-                    end
-                else
-                    hud.DailyQuests.Buttons[i]:setColor(Color(181, 196, 157))
-                end
-                
-                hud.DailyQuests.Buttons[i].name.pos = Number2(hud.DailyQuests.Buttons[i].pos.X + 10, hud.DailyQuests.Buttons[i].pos.Y + hud.DailyQuests.Buttons[i].Height - hud.DailyQuests.Buttons[i].name.Height - 5)
-                hud.DailyQuests.Buttons[i].reward.pos = Number2(hud.DailyQuests.Buttons[i].pos.X + hud.DailyQuests.Buttons[i].Width - hud.DailyQuests.Buttons[i].reward.Width - 10, hud.DailyQuests.Buttons[i].pos.Y + hud.DailyQuests.Buttons[i].Height - hud.DailyQuests.Buttons[i].reward.Height)
-                hud.DailyQuests.Buttons[i].description.pos = Number2(hud.DailyQuests.Buttons[i].pos.X + 10, hud.DailyQuests.Buttons[i].pos.Y + hud.DailyQuests.Buttons[i].Height - hud.DailyQuests.Buttons[i].description.Height - hud.DailyQuests.Buttons[i].name.Height)
-            end
+            
+            hud.Quests.Buttons[i].name.pos = Number2(hud.Quests.Buttons[i].pos.X + 10, hud.Quests.Buttons[i].pos.Y + hud.Quests.Buttons[i].Height - hud.Quests.Buttons[i].name.Height - 5)
+            hud.Quests.Buttons[i].reward.pos = Number2(hud.Quests.Buttons[i].pos.X + hud.Quests.Buttons[i].Width - hud.Quests.Buttons[i].reward.Width - 10, hud.Quests.Buttons[i].pos.Y + hud.Quests.Buttons[i].Height - hud.Quests.Buttons[i].reward.Height)
+            hud.Quests.Buttons[i].description.pos = Number2(hud.Quests.Buttons[i].pos.X + 10, hud.Quests.Buttons[i].pos.Y + hud.Quests.Buttons[i].Height - hud.Quests.Buttons[i].description.Height - hud.Quests.Buttons[i].name.Height)
         end
-    else
-        if _QUEST_TAB == "Career" then
-            for i=1, #_QUESTS.regular do
-                hud.Quests.Buttons[i].Width, hud.Quests.Buttons[i].Height = 0, 0
-                hud.Quests.Buttons[i].pos = Number2(-1000, -1000)
-                hud.Quests.Buttons[i].name.pos = Number2(-1000, -1000)
-                hud.Quests.Buttons[i].description.pos = Number2(-1000, -1000)
-                hud.Quests.Buttons[i].reward.pos = Number2(-1000, -1000)
-            end
-        elseif _QUEST_TAB == "Daily" then
-            for i=1, #_QUESTS.daily do
-                hud.DailyQuests.Buttons[i].Width, hud.Quests.Buttons[i].Height = 0, 0
-                hud.DailyQuests.Buttons[i].pos = Number2(-1000, -1000)
-                hud.DailyQuests.Buttons[i].name.pos = Number2(-1000, -1000)
-                hud.DailyQuests.Buttons[i].description.pos = Number2(-1000, -1000)
-                hud.DailyQuests.Buttons[i].reward.pos = Number2(-1000, -1000)
-            end
-        end
+        hud.Quests.Buttons.Right.Width, hud.Quests.Buttons.Right.Height = Screen.Width / 5, Screen.Height / 15
+        hud.Quests.Buttons.Left.Width, hud.Quests.Buttons.Left.Height = Screen.Width / 5, Screen.Height / 15
+        hud.Quests.Buttons.Right.pos = Number2(Screen.Width - hud.Quests.Buttons.Right.Width - 10, Screen.Height / 10+5)
+        hud.Quests.Buttons.Left.pos = Number2(10, Screen.Height / 10+5)
     end
 end
 
@@ -521,7 +454,6 @@ download = function()
     sounds_downloading = {
         purchase = "pezh/sounds/purchase.mp3",
         quest_complete = "pezh/sounds/quest_complete.mp3",
-        music = "pezh/sounds/Infinite_Coins.mp3",
     }
     sounds_need_download = 2
     sounds_downloaded = 0
@@ -569,6 +501,20 @@ function checkload()
     button_click_sound = AudioSource("button_5")
     button_click_sound.Pitch = 1
     button_click_sound.Volume = 0.8
+end
+
+formatCoins = function(value)
+    local text = ""
+    if value < 1000 then
+        return math.floor(value)
+    elseif value < 1000000 then
+        -- return something like "1.2k" with 1 decimal place
+        local k = math.floor(value / 1000)
+        local d = math.floor((value % 1000) / 100)
+        return k .. "." .. d .. "k"
+    else
+        return math.floor(value)
+    end
 end
 
 Client.DirectionalPad = nil
