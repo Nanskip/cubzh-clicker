@@ -158,6 +158,28 @@ initUi = function()
         hud.Upgrades.Buttons[i].cost.pos = Number2(0, 0)
     end
 
+    hud.Upgrades.Buttons.Right = ui:createButton("->")
+    hud.Upgrades.Buttons.Right.onRelease = function()
+        _SELECTED_UPGRADES_PAGE = _SELECTED_UPGRADES_PAGE + 1
+        if _SELECTED_UPGRADES_PAGE > math.floor(#_UPGRADES / 6) then
+            _SELECTED_UPGRADES_PAGE = math.floor(#_UPGRADES / 6)
+        end
+        updateUi()
+    end
+    hud.Upgrades.Buttons.Right.pos = Number2(-1000, -1000)
+    hud.Upgrades.Buttons.Right.Width, hud.Upgrades.Buttons.Right.Height = Screen.Width / 5, Screen.Height / 15
+
+    hud.Upgrades.Buttons.Left = ui:createButton("<-")
+    hud.Upgrades.Buttons.Left.onRelease = function()
+        _SELECTED_UPGRADES_PAGE = _SELECTED_UPGRADES_PAGE - 1
+        if _SELECTED_UPGRADES_PAGE < 0 then
+            _SELECTED_UPGRADES_PAGE = 0
+        end
+        updateUi()
+    end
+    hud.Upgrades.Buttons.Left.pos = Number2(-1000, -1000)
+    hud.Upgrades.Buttons.Left.Width, hud.Upgrades.Buttons.Left.Height = Screen.Width / 5, Screen.Height / 15
+
     -- QUESTS
     hud.Quests = {}
     hud.Quests.Buttons = {}
@@ -186,6 +208,28 @@ initUi = function()
         hud.Quests.Buttons[i].reward = ui:createText(_QUESTS.regular[i].reward, Color(0, 0, 0))
         hud.Quests.Buttons[i].reward.pos = Number2(0, 0)
     end
+
+    hud.Quests.Buttons.Right = ui:createButton("->")
+    hud.Quests.Buttons.Right.onRelease = function()
+        _SELECTED_QUESTS_PAGE = _SELECTED_QUESTS_PAGE + 1
+        if _SELECTED_QUESTS_PAGE > math.floor(#_QUESTS.regular / 6) then
+            _SELECTED_QUESTS_PAGE = math.floor(#_QUESTS.regular / 6)
+        end
+        updateUi()
+    end
+    hud.Quests.Buttons.Right.pos = Number2(-1000, -1000)
+    hud.Quests.Buttons.Right.Width, hud.Quests.Buttons.Right.Height = Screen.Width / 5, Screen.Height / 15
+
+    hud.Quests.Buttons.Left = ui:createButton("<-")
+    hud.Quests.Buttons.Left.onRelease = function()
+        _SELECTED_QUESTS_PAGE = _SELECTED_QUESTS_PAGE - 1
+        if _SELECTED_QUESTS_PAGE < 0 then
+            _SELECTED_QUESTS_PAGE = 0
+        end
+        updateUi()
+    end
+    hud.Quests.Buttons.Left.pos = Number2(-1000, -1000)
+    hud.Quests.Buttons.Left.Width, hud.Quests.Buttons.Left.Height = Screen.Width / 5, Screen.Height / 15
 
     -- COINS
     hud.Coins = {}
@@ -237,7 +281,7 @@ updateUi = function()
 
     -- COINS
     function updateCoins()
-        hud.Coins.Text.Text = "🇵 " .. math.floor(_COINS)
+        hud.Coins.Text.Text = "🇵 " .. formatCoins(_COINS)
         hud.Coins.Text.pos = Number2(Screen.Width / 2 - hud.Coins.Text.Width / 2, Screen.Height - Screen.SafeArea.Top - 5 - hud.Coins.Text.Height)
         hud.Coins.Background.Width = hud.Coins.Text.Width + 6
         hud.Coins.Background.Height = hud.Coins.Text.Height + 6
@@ -256,6 +300,17 @@ updateUi = function()
     hud.DownButtons.Quests.Width, hud.DownButtons.Quests.Height = Screen.Width / 3, Screen.Height / 10
 
     -- UPGRADES
+    for i=1, #_UPGRADES do
+        hud.Upgrades.Buttons[i].Width, hud.Upgrades.Buttons[i].Height = 0, 0
+        hud.Upgrades.Buttons[i].pos = Number2(-1000, -1000)
+        hud.Upgrades.Buttons[i].image.pos = Number2(-1000, -1000)
+        hud.Upgrades.Buttons[i].name.pos = Number2(-1000, -1000)
+        hud.Upgrades.Buttons[i].description.pos = Number2(-1000, -1000)
+        hud.Upgrades.Buttons[i].cost.pos = Number2(-1000, -1000)
+    end
+    hud.Upgrades.Buttons.Right.pos = Number2(-1000, -1000)
+    hud.Upgrades.Buttons.Left.pos = Number2(-1000, -1000)
+
     if _CURRENT_SCREEN == "Upgrades" then
         for i=(_SELECTED_UPGRADES_PAGE*6)+1, (_SELECTED_UPGRADES_PAGE+1)*6 do
             if _UPGRADES[i] == nil then
@@ -290,20 +345,29 @@ updateUi = function()
                 hud.Upgrades.Buttons[i]:setColorDisabled(Color(216, 222, 104))
             end
         end
-    else
-        for i=1, #_UPGRADES do
-            hud.Upgrades.Buttons[i].Width, hud.Upgrades.Buttons[i].Height = 0, 0
-            hud.Upgrades.Buttons[i].pos = Number2(-1000, -1000)
-            hud.Upgrades.Buttons[i].image.pos = Number2(-1000, -1000)
-            hud.Upgrades.Buttons[i].name.pos = Number2(-1000, -1000)
-            hud.Upgrades.Buttons[i].description.pos = Number2(-1000, -1000)
-            hud.Upgrades.Buttons[i].cost.pos = Number2(-1000, -1000)
-        end
+        hud.Upgrades.Buttons.Right.Width, hud.Upgrades.Buttons.Right.Height = Screen.Width / 5, Screen.Height / 15
+        hud.Upgrades.Buttons.Left.Width, hud.Upgrades.Buttons.Left.Height = Screen.Width / 5, Screen.Height / 15
+        hud.Upgrades.Buttons.Right.pos = Number2(Screen.Width - hud.Upgrades.Buttons.Right.Width - 10, Screen.Height / 10+5)
+        hud.Upgrades.Buttons.Left.pos = Number2(10, Screen.Height / 10+5)
     end
 
+
     -- QUESTS
+    for i=1, #_QUESTS.regular do
+        hud.Quests.Buttons[i].Width, hud.Quests.Buttons[i].Height = 0, 0
+        hud.Quests.Buttons[i].pos = Number2(-1000, -1000)
+        hud.Quests.Buttons[i].name.pos = Number2(-1000, -1000)
+        hud.Quests.Buttons[i].description.pos = Number2(-1000, -1000)
+        hud.Quests.Buttons[i].reward.pos = Number2(-1000, -1000)
+    end
+    hud.Quests.Buttons.Right.pos = Number2(-1000, -1000)
+    hud.Quests.Buttons.Left.pos = Number2(-1000, -1000)
+
     if _CURRENT_SCREEN == "Quests" then
         for i=(_SELECTED_QUESTS_PAGE*6)+1, (_SELECTED_QUESTS_PAGE+1)*6 do
+            if _QUESTS.regular[i] == nil then
+                break
+            end
             hud.Quests.Buttons[i].Width, hud.Quests.Buttons[i].Height = Screen.Width - 10, Screen.Height / 10
             hud.Quests.Buttons[i].pos = Number2(5, Screen.Height - Screen.SafeArea.Top - 5 - hud.Quests.Buttons[i].Height - (i-_SELECTED_QUESTS_PAGE*6) * (hud.Quests.Buttons[i].Height+2))
 
@@ -326,14 +390,10 @@ updateUi = function()
             hud.Quests.Buttons[i].reward.pos = Number2(hud.Quests.Buttons[i].pos.X + hud.Quests.Buttons[i].Width - hud.Quests.Buttons[i].reward.Width - 10, hud.Quests.Buttons[i].pos.Y + hud.Quests.Buttons[i].Height - hud.Quests.Buttons[i].reward.Height)
             hud.Quests.Buttons[i].description.pos = Number2(hud.Quests.Buttons[i].pos.X + 10, hud.Quests.Buttons[i].pos.Y + hud.Quests.Buttons[i].Height - hud.Quests.Buttons[i].description.Height - hud.Quests.Buttons[i].name.Height)
         end
-    else
-        for i=1, #_QUESTS.regular do
-            hud.Quests.Buttons[i].Width, hud.Quests.Buttons[i].Height = 0, 0
-            hud.Quests.Buttons[i].pos = Number2(-1000, -1000)
-            hud.Quests.Buttons[i].name.pos = Number2(-1000, -1000)
-            hud.Quests.Buttons[i].description.pos = Number2(-1000, -1000)
-            hud.Quests.Buttons[i].reward.pos = Number2(-1000, -1000)
-        end
+        hud.Quests.Buttons.Right.Width, hud.Quests.Buttons.Right.Height = Screen.Width / 5, Screen.Height / 15
+        hud.Quests.Buttons.Left.Width, hud.Quests.Buttons.Left.Height = Screen.Width / 5, Screen.Height / 15
+        hud.Quests.Buttons.Right.pos = Number2(Screen.Width - hud.Quests.Buttons.Right.Width - 10, Screen.Height / 10+5)
+        hud.Quests.Buttons.Left.pos = Number2(10, Screen.Height / 10+5)
     end
 end
 
@@ -441,6 +501,20 @@ function checkload()
     button_click_sound = AudioSource("button_5")
     button_click_sound.Pitch = 1
     button_click_sound.Volume = 0.8
+end
+
+formatCoins = function(value)
+    local text = ""
+    if value < 1000 then
+        return math.floor(value)
+    elseif value < 1000000 then
+        -- return something like "1.2k" with 1 decimal place
+        local k = math.floor(value / 1000)
+        local d = math.floor((value % 1000) / 100)
+        return k .. "." .. d .. "k"
+    else
+        return math.floor(value)
+    end
 end
 
 Client.DirectionalPad = nil
