@@ -128,6 +128,45 @@ local quests = {
             end,
             unlocked = false,
         },
+    },
+
+    daily = {
+        {
+            name = "Good morning!",
+            code_reward = math.min(10000, (_COINS_PER_SECOND*10 + _COINS*50)),
+            code_check = math.max(1000, (_COINS_PER_SECOND*10 + _COINS*50)),
+            description = "Get " .. formatCoins(code_check) .. " coins.",
+            reward = formatCoins(code_reward) .. " 🇵",
+            check = function()
+                if _COINS >= code_check then
+                    return true
+                end
+                return false
+            end,
+            get_reward = function(self)
+                _COINS = _COINS + code_reward
+                self.unlocked = true
+            end,
+            unlocked = false,
+        },
+        {
+            name = "Let's make some robots!",
+            code_reward = math.min(1000, (_COINS_PER_SECOND*50)),
+            code_check = math.min(1000, (_COINS_PER_SECOND*1.2)),
+            description = "Get " .. formatCoins(code_check) .. " coins per second.",
+            reward = formatCoins(code_reward) .. " 🛠️",
+            check = function()
+                if _COINS_PER_SECOND >= code_check then
+                    return true
+                end
+                return false
+            end,
+            get_reward = function(self)
+                _COINS_PER_SECOND = _COINS_PER_SECOND + code_reward
+                self.unlocked = true
+            end,
+            unlocked = false,
+        },
     }
 }
 
