@@ -133,41 +133,40 @@ local quests = {
     daily = {
         {
             name = "Good morning!",
-            code_reward = math.min(10000, (_COINS_PER_SECOND*10 + _COINS*50)),
-            code_check = math.max(1000, (_COINS_PER_SECOND*10 + _COINS*50)),
-            description = "Get " .. formatCoins(code_check) .. " coins.",
-            reward = formatCoins(code_reward) .. " 🇵",
-            check = function()
-                if _COINS >= code_check then
-                    return true
-                end
-                return false
+            code_reward = math.min(10000, (_COINS_PER_SECOND * 10 + _COINS * 50)),
+            code_check = math.max(1000, (_COINS_PER_SECOND * 10 + _COINS * 50)),
+            description = "",  -- Placeholder for description; will be set in init function
+            reward = "",       -- Placeholder for reward; will be set in init function
+            check = function(self)
+                return _COINS >= self.code_check
             end,
             get_reward = function(self)
-                _COINS = _COINS + code_reward
+                _COINS = _COINS + self.code_reward
                 self.unlocked = true
             end,
             unlocked = false,
         },
         {
             name = "Let's make some robots!",
-            code_reward = math.min(1000, (_COINS_PER_SECOND*50)),
-            code_check = math.min(1000, (_COINS_PER_SECOND*1.2)),
-            description = "Get " .. formatCoins(code_check) .. " coins per second.",
-            reward = formatCoins(code_reward) .. " 🛠️",
-            check = function()
-                if _COINS_PER_SECOND >= code_check then
-                    return true
-                end
-                return false
+            code_reward = math.min(1000, (_COINS_PER_SECOND * 50)),
+            code_check = math.min(1000, (_COINS_PER_SECOND * 1.2)),
+            description = "",  -- Placeholder for description; will be set in init function
+            reward = "",       -- Placeholder for reward; will be set in init function
+            check = function(self)
+                return _COINS_PER_SECOND >= self.code_check
             end,
             get_reward = function(self)
-                _COINS_PER_SECOND = _COINS_PER_SECOND + code_reward
+                _COINS_PER_SECOND = _COINS_PER_SECOND + self.code_reward
                 self.unlocked = true
             end,
             unlocked = false,
         },
     }
 }
+
+for _, quest in ipairs(daily) do
+    quest.description = "Get " .. formatCoins(quest.code_check) .. " coins."
+    quest.reward = formatCoins(quest.code_reward) .. " 🇵"
+end
 
 return quests
