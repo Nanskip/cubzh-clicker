@@ -133,7 +133,7 @@ local quests = {
     daily = {
         {
             name = "Good morning!",
-            code_reward = math.min(10000, (_COINS_PER_SECOND * 10 + _COINS * 50)),
+            code_reward = math.min(10000, math.max((_COINS_PER_SECOND * 10 + _COINS * 50), 500)),
             code_check = math.max(1000, (_COINS_PER_SECOND * 10 + _COINS * 50)),
             type = "coins",
             description = "",  -- Placeholder for description; will be set in init function
@@ -149,7 +149,7 @@ local quests = {
         },
         {
             name = "Let's make some robots!",
-            code_reward = math.min(1000, (_COINS_PER_SECOND * 50)),
+            code_reward = math.min(1000, math.max((_COINS_PER_SECOND * 50), 10)),
             code_check = math.min(1000, math.max((_COINS_PER_SECOND * 1.2), 5)),
             type = "auto",
             description = "",  -- Placeholder for description; will be set in init function
