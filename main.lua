@@ -187,7 +187,7 @@ initUi = function()
     for i=1, #_QUESTS.regular do
         hud.Quests.Buttons[i] = ui:createButton("")
         hud.Quests.Buttons[i].onRelease = function(self)
-            if _QUESTS.regular[i].check() then
+            if _QUESTS.regular[i]:check() then
                 _QUESTS.regular[i]:get_reward()
                 self:disable()
 
@@ -237,7 +237,7 @@ initUi = function()
     for i=1, #_QUESTS.daily do
         hud.DailyQuests.Buttons[i] = ui:createButton("")
         hud.DailyQuests.Buttons[i].onRelease = function(self)
-            if _QUESTS.daily[i].check() then
+            if _QUESTS.daily[i]:check() then
                 _QUESTS.daily[i]:get_reward()
                 self:disable()
 
@@ -419,6 +419,21 @@ updateUi = function()
     hud.Quests.Career.pos = Number2(-1000, -1000)
     hud.Quests.Daily.pos = Number2(-1000, -1000)
 
+    for i=1, #_QUESTS.regular do
+        hud.Quests.Buttons[i].Width, hud.Quests.Buttons[i].Height = 0, 0
+        hud.Quests.Buttons[i].pos = Number2(-1000, -1000)
+        hud.Quests.Buttons[i].name.pos = Number2(-1000, -1000)
+        hud.Quests.Buttons[i].description.pos = Number2(-1000, -1000)
+        hud.Quests.Buttons[i].reward.pos = Number2(-1000, -1000)
+    end
+    for i=1, #_QUESTS.daily do
+        hud.DailyQuests.Buttons[i].Width, hud.DailyQuests.Buttons[i].Height = 0, 0
+        hud.DailyQuests.Buttons[i].pos = Number2(-1000, -1000)
+        hud.DailyQuests.Buttons[i].name.pos = Number2(-1000, -1000)
+        hud.DailyQuests.Buttons[i].description.pos = Number2(-1000, -1000)
+        hud.DailyQuests.Buttons[i].reward.pos = Number2(-1000, -1000)
+    end
+
     if _CURRENT_SCREEN == "Quests" then
         if _QUEST_TAB == "Career" then
             for i=(_SELECTED_QUESTS_PAGE*6)+1, (_SELECTED_QUESTS_PAGE+1)*6 do
@@ -431,7 +446,7 @@ updateUi = function()
                 hud.Quests.Buttons[i].name.Text = _QUESTS.regular[i].name
                 hud.Quests.Buttons[i].description.Text = _QUESTS.regular[i].description
 
-                if _QUESTS.regular[i].check() then
+                if _QUESTS.regular[i]:check() then
                     if _QUESTS.regular[i].unlocked == false then
                         hud.Quests.Buttons[i]:setColor(Color(123, 224, 147))
                     else
@@ -453,12 +468,12 @@ updateUi = function()
                     break
                 end
                 hud.DailyQuests.Buttons[i].Width, hud.DailyQuests.Buttons[i].Height = Screen.Width - 10, Screen.Height / 10
-                hud.DailyQuests.Buttons[i].pos = Number2(5, Screen.Height - Screen.SafeArea.Top - 5 - hud.DailyQuests.Buttons[i].Height - (i-_SELECTED_QUESTS_PAGE*6) * (hud.Quests.Buttons[i].Height+2))
+                hud.DailyQuests.Buttons[i].pos = Number2(5, Screen.Height - Screen.SafeArea.Top - 5 - hud.DailyQuests.Buttons[i].Height - (i-_SELECTED_QUESTS_PAGE*6) * (hud.DailyQuests.Buttons[i].Height+2))
 
                 hud.DailyQuests.Buttons[i].name.Text = _QUESTS.daily[i].name
                 hud.DailyQuests.Buttons[i].description.Text = _QUESTS.daily[i].description
 
-                if _QUESTS.daily[i].check() then
+                if _QUESTS.daily[i]:check() then
                     if _QUESTS.daily[i].unlocked == false then
                         hud.DailyQuests.Buttons[i]:setColor(Color(123, 224, 147))
                     else
@@ -484,21 +499,6 @@ updateUi = function()
         hud.Quests.Career.pos = Number2(Screen.Width/2-hud.Quests.Career.Width , Screen.Height / 10+5)
         hud.Quests.Daily.Width, hud.Quests.Daily.Height = Screen.Width / 4, Screen.Height / 15
         hud.Quests.Daily.pos = Number2(Screen.Width/2, Screen.Height / 10+5)
-    else
-        for i=1, #_QUESTS.regular do
-            hud.Quests.Buttons[i].Width, hud.Quests.Buttons[i].Height = 0, 0
-            hud.Quests.Buttons[i].pos = Number2(-1000, -1000)
-            hud.Quests.Buttons[i].name.pos = Number2(-1000, -1000)
-            hud.Quests.Buttons[i].description.pos = Number2(-1000, -1000)
-            hud.Quests.Buttons[i].reward.pos = Number2(-1000, -1000)
-        end
-        for i=1, #_QUESTS.daily do
-            hud.DailyQuests.Buttons[i].Width, hud.Quests.Buttons[i].Height = 0, 0
-            hud.DailyQuests.Buttons[i].pos = Number2(-1000, -1000)
-            hud.DailyQuests.Buttons[i].name.pos = Number2(-1000, -1000)
-            hud.DailyQuests.Buttons[i].description.pos = Number2(-1000, -1000)
-            hud.DailyQuests.Buttons[i].reward.pos = Number2(-1000, -1000)
-        end
     end
 end
 

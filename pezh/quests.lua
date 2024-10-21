@@ -149,7 +149,7 @@ local quests = {
         {
             name = "Let's make some robots!",
             code_reward = math.min(1000, (_COINS_PER_SECOND * 50)),
-            code_check = math.min(1000, (_COINS_PER_SECOND * 1.2)),
+            code_check = math.min(1000, math.max((_COINS_PER_SECOND * 1.2), 5)),
             description = "",  -- Placeholder for description; will be set in init function
             reward = "",       -- Placeholder for reward; will be set in init function
             check = function(self)
@@ -164,7 +164,7 @@ local quests = {
     }
 }
 
-for _, quest in ipairs(daily) do
+for _, quest in ipairs(quests.daily) do
     quest.description = "Get " .. formatCoins(quest.code_check) .. " coins."
     quest.reward = formatCoins(quest.code_reward) .. " 🇵"
 end
